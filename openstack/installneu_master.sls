@@ -1,13 +1,13 @@
 create_neudata:
   cmd.run:
-    - name: echo -e 'CREATE DATABASE neutron;' | mysql -uroot -p123456
+    - name: echo -e 'CREATE DATABASE neutron;' | mysql -uroot -pMYSQL_PASS
     - require:
       - cmd: modify_mysqldata
 grant_neu:
   cmd.run:
     - names:
-      - echo -e "GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'slave1' IDENTIFIED BY 'NEUTRON_DBPASS';" | mysql -uroot -p123456
-      - echo -e "GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'%' IDENTIFIED BY 'NEUTRON_DBPASS';" | mysql -uroot -p123456
+      - echo -e "GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'slave1' IDENTIFIED BY 'NEUTRON_DBPASS';" | mysql -uroot -pMYSQL_PASS
+      - echo -e "GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'%' IDENTIFIED BY 'NEUTRON_DBPASS';" | mysql -uroot -pMYSQL_PASS
     - require:
       - cmd: create_neudata
 create_userneu:
@@ -52,8 +52,8 @@ vim_neutron:
       - sed -i '/\[ml2_type_flat\]$/a\flat_networks = provider' /etc/neutron/plugins/ml2/ml2_conf.ini
       - sed -i '/\[ml2_type_vxlan\]$/a\vni_ranges = 1:1000' /etc/neutron/plugins/ml2/ml2_conf.ini
       - sed -i '/\[securitygroup\]$/a\enable_ipset = true' /etc/neutron/plugins/ml2/ml2_conf.ini
-      - sed -i '/\[linux_bridge\]$/a\physical_interface_mappings = provider:eno16777736' /etc/neutron/plugins/ml2/linuxbridge_agent.ini
-      - sed -i '/\[vxlan\]$/a\enable_vxlan = true\nlocal_ip = 192.168.1.66\nl2_population = true' /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+      - sed -i '/\[linux_bridge\]$/a\physical_interface_mappings = provider:enomaster' /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+      - sed -i '/\[vxlan\]$/a\enable_vxlan = true\nlocal_ip = controller_ip\nl2_population = true' /etc/neutron/plugins/ml2/linuxbridge_agent.ini
       - sed -i '/\[securitygroup\]$/a\enable_security_group = true\nfirewall_driver = neutron.agent.linux.iptables_firewall.IptablesFirewallDriver' /etc/neutron/plugins/ml2/linuxbridge_agent.ini
       - sed -i '/\[DEFAULT\]$/a\interface_driver = linuxbridge' /etc/neutron/l3_agent.ini
       - sed -i '/\[DEFAULT\]$/a\interface_driver = linuxbridge\ndhcp_driver = neutron.agent.linux.dhcp.Dnsmasq\nenable_isolated_metadata = true' /etc/neutron/dhcp_agent.ini

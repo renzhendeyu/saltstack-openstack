@@ -8,7 +8,7 @@ delete_server:
       - pkg: chrony_pkg_install
 alter_chrony:
   cmd.run:
-    - name: sed -i '/#server 0.centos.pool.ntp.org iburst/i\server master iburst' /etc/chrony.conf
+    - name: sed -i '/#server 0.centos.pool.ntp.org iburst/i\server slave1 iburst' /etc/chrony.conf
     - require:
       - cmd: delete_server
 running_chrony:

@@ -48,7 +48,7 @@ running_mysql:
       - cmd: modify_openstackconf
 modify_mysqldata:
   cmd.run:
-    - name: echo -e "\nY\n123456\n123456\nY\nn\nY\nY\n" | mysql_secure_installation
+    - name: echo -e "\nY\nMYSQL_PASS\nMYSQL_PASS\nY\nn\nY\nY\n" | mysql_secure_installation
     - require:
       - service: running_mysql
 modify_mem:

@@ -6,7 +6,7 @@ install_keystone:
       - mod_wsgi
 keystone_mysql:
   cmd.run:
-    - name: echo -e "CREATE DATABASE keystone;" | mysql -uroot -p123456 && echo -e "GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'slave1' IDENTIFIED BY 'KEYSTONE_DBPASS';" | mysql -uroot -p123456 && echo -e "GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'%' IDENTIFIED BY 'KEYSTONE_DBPASS';" | mysql -uroot -p123456
+    - name: echo -e "CREATE DATABASE keystone;" | mysql -uroot -pMYSQL_PASS && echo -e "GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'slave1' IDENTIFIED BY 'KEYSTONE_DBPASS';" | mysql -uroot -pMYSQL_PASS && echo -e "GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'%' IDENTIFIED BY 'KEYSTONE_DBPASS';" | mysql -uroot -pMYSQL_PASS
 modify_keystone:
   cmd.run:
     - name: sed -i '/database\]$/a\connection = mysql+pymysql://keystone:KEYSTONE_DBPASS@slave1/keystone' /etc/keystone/keystone.conf && sed -i '/token\]$/a\provider = fernet' /etc/keystone/keystone.conf

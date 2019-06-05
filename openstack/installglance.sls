@@ -3,7 +3,7 @@ install_glance:
     - name: openstack-glance
 create_glancemysql:
   cmd.run:
-    - name: echo -e 'CREATE DATABASE glance;' | mysql -uroot -p123456 && echo -e "GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'slave1' IDENTIFIED BY 'GLANCE_DBPASS';" | mysql -uroot -p123456 && echo -e "GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'%' IDENTIFIED BY 'GLANCE_DBPASS';" | mysql -uroot -p123456
+    - name: echo -e 'CREATE DATABASE glance;' | mysql -uroot -pMYSQL_PASS && echo -e "GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'slave1' IDENTIFIED BY 'GLANCE_DBPASS';" | mysql -uroot -pMYSQL_PASS && echo -e "GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'%' IDENTIFIED BY 'GLANCE_DBPASS';" | mysql -uroot -pMYSQL_PASS
     - require:
       - cmd: modify_mysqldata
 create_userglance:

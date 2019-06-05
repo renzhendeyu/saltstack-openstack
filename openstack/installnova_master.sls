@@ -1,23 +1,23 @@
 create_novadata:
   cmd.run:
     - names:
-      - echo -e 'CREATE DATABASE nova_api;' | mysql -uroot -p123456
-      - echo -e 'CREATE DATABASE nova;' | mysql -uroot -p123456
-      - echo -e 'CREATE DATABASE nova_cell0;' | mysql -uroot -p123456
-      - echo -e 'CREATE DATABASE placement;' | mysql -uroot -p123456
+      - echo -e 'CREATE DATABASE nova_api;' | mysql -uroot -pMYSQL_PASS
+      - echo -e 'CREATE DATABASE nova;' | mysql -uroot -pMYSQL_PASS
+      - echo -e 'CREATE DATABASE nova_cell0;' | mysql -uroot -pMYSQL_PASS
+      - echo -e 'CREATE DATABASE placement;' | mysql -uroot -pMYSQL_PASS
     - require:
       - cmd: modify_mysqldata
 grant_nova:
   cmd.run:
     - names:
-      - echo -e "GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'%' IDENTIFIED BY 'NOVA_DBPASS';" | mysql -uroot -p123456
-      - echo -e "GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'slave1' IDENTIFIED BY 'NOVA_DBPASS';" | mysql -uroot -p123456
-      - echo -e "GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'%' IDENTIFIED BY 'NOVA_DBPASS';" | mysql -uroot -p123456
-      - echo -e "GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'slave1' IDENTIFIED BY 'NOVA_DBPASS';" | mysql -uroot -p123456
-      - echo -e "GRANT ALL PRIVILEGES ON nova_cell0.* TO 'nova'@'%' IDENTIFIED BY 'NOVA_DBPASS';" | mysql -uroot -p123456
-      - echo -e "GRANT ALL PRIVILEGES ON nova_cell0.* TO 'nova'@'slave1' IDENTIFIED BY 'NOVA_DBPASS';" | mysql -uroot -p123456
-      - echo -e "GRANT ALL PRIVILEGES ON placement.* TO 'placement'@'%' IDENTIFIED BY 'PLACEMENT_DBPASS';" | mysql -uroot -p123456
-      - echo -e "GRANT ALL PRIVILEGES ON placement.* TO 'placement'@'slave1' IDENTIFIED BY 'PLACEMENT_DBPASS';" | mysql -uroot -p123456
+      - echo -e "GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'%' IDENTIFIED BY 'NOVA_DBPASS';" | mysql -uroot -pMYSQL_PASS
+      - echo -e "GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'slave1' IDENTIFIED BY 'NOVA_DBPASS';" | mysql -uroot -pMYSQL_PASS
+      - echo -e "GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'%' IDENTIFIED BY 'NOVA_DBPASS';" | mysql -uroot -pMYSQL_PASS
+      - echo -e "GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'slave1' IDENTIFIED BY 'NOVA_DBPASS';" | mysql -uroot -pMYSQL_PASS
+      - echo -e "GRANT ALL PRIVILEGES ON nova_cell0.* TO 'nova'@'%' IDENTIFIED BY 'NOVA_DBPASS';" | mysql -uroot -pMYSQL_PASS
+      - echo -e "GRANT ALL PRIVILEGES ON nova_cell0.* TO 'nova'@'slave1' IDENTIFIED BY 'NOVA_DBPASS';" | mysql -uroot -pMYSQL_PASS
+      - echo -e "GRANT ALL PRIVILEGES ON placement.* TO 'placement'@'%' IDENTIFIED BY 'PLACEMENT_DBPASS';" | mysql -uroot -pMYSQL_PASS
+      - echo -e "GRANT ALL PRIVILEGES ON placement.* TO 'placement'@'slave1' IDENTIFIED BY 'PLACEMENT_DBPASS';" | mysql -uroot -pMYSQL_PASS
     - require:
       - cmd: create_novadata
 create_usernova:
@@ -64,7 +64,7 @@ pkg_installnova:
 vim_novaconf:
   cmd.run:
     - names:
-      - sed -i '/\[DEFAULT\]$/a\firewall_driver = nova.virt.firewall.NoopFirewallDriver\nuse_neutron = true\nmy_ip = 192.168.1.66\ntransport_url = rabbit://openstack:RABBIT_PASS@slave1\nenabled_apis = osapi_compute,metadata' /etc/nova/nova.conf
+      - sed -i '/\[DEFAULT\]$/a\firewall_driver = nova.virt.firewall.NoopFirewallDriver\nuse_neutron = true\nmy_ip = controller_ip\ntransport_url = rabbit://openstack:RABBIT_PASS@slave1\nenabled_apis = osapi_compute,metadata' /etc/nova/nova.conf
       - sed -i '/\[api_database\]$/a\connection = mysql+pymysql://nova:NOVA_DBPASS@slave1/nova_api' /etc/nova/nova.conf
       - sed -i '/\[database\]$/a\connection = mysql+pymysql://nova:NOVA_DBPASS@slave1/nova' /etc/nova/nova.conf
       - sed -i '/\[placement_database\]$/a\connection = mysql+pymysql://placement:PLACEMENT_DBPASS@slave1/placement' /etc/nova/nova.conf

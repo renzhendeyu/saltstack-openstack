@@ -1,13 +1,13 @@
 create_cinderdata:
   cmd.run:
-    - name: echo -e 'CREATE DATABASE cinder;' | mysql -uroot -p123456
+    - name: echo -e 'CREATE DATABASE cinder;' | mysql -uroot -pMYSQL_PASS
     - require:
       - cmd: modify_mysqldata
 grant_cinder:
   cmd.run:
     - names:
-      - echo -e "GRANT ALL PRIVILEGES ON cinder.* TO 'cinder'@'slave1' IDENTIFIED BY 'CINDER_DBPASS';" | mysql -uroot -p123456
-      - echo -e "GRANT ALL PRIVILEGES ON cinder.* TO 'cinder'@'%' IDENTIFIED BY 'CINDER_DBPASS';" | mysql -uroot -p123456
+      - echo -e "GRANT ALL PRIVILEGES ON cinder.* TO 'cinder'@'slave1' IDENTIFIED BY 'CINDER_DBPASS';" | mysql -uroot -pMYSQL_PASS
+      - echo -e "GRANT ALL PRIVILEGES ON cinder.* TO 'cinder'@'%' IDENTIFIED BY 'CINDER_DBPASS';" | mysql -uroot -pMYSQL_PASS
 create_usercinder:
   cmd.run:
     - name: . /root/admin-openrc && openstack user create --domain default cinder --password CINDER_PASS
@@ -43,7 +43,7 @@ vim_cindercontroller:
   cmd.run:
     - names:
       - sed -i '/\[database\]$/a\connection = mysql+pymysql://cinder:CINDER_DBPASS@slave1/cinder' /etc/cinder/cinder.conf
-      - sed -i '/\[DEFAULT\]$/a\transport_url = rabbit://openstack:RABBIT_PASS@slave1\nauth_strategy = keystone\nmy_ip = 192.168.1.66' /etc/cinder/cinder.conf
+      - sed -i '/\[DEFAULT\]$/a\transport_url = rabbit://openstack:RABBIT_PASS@slave1\nauth_strategy = keystone\nmy_ip = controller_ip' /etc/cinder/cinder.conf
       - sed -i '/\[keystone_authtoken\]$/a\www_authenticate_uri = http://slave1:5000\nauth_url = http://slave1:5000\nmemcached_servers = slave1:11211\nauth_type = password\nproject_domain_id = default\nuser_domain_id = default\nproject_name = service\nusername = cinder\npassword = CINDER_PASS' /etc/cinder/cinder.conf
       - sed -i '/\[oslo_concurrency\]$/a\lock_path = /var/lib/cinder/tmp' /etc/cinder/cinder.conf
     - require:
