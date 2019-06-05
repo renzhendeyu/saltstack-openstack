@@ -9,12 +9,10 @@ openstack:
     - installdashboard
     - installcinder_master
   'slave2':
-    - rely_prepare
     - chrony_slave
     - installnova_slave
     - installneu_slave
   'slave3':
-    - rely_prepare
     - chrony_slave
     - installcinder_slave
 
