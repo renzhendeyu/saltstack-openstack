@@ -10,9 +10,11 @@ file_roots:
 重启saltstack服务。
 
 先使用命令来部署openstack安装环境，部署完后，系统会自动重启以适用配置：
+
 salt '*' state.highstate saltenv=envprepare
 
 重启完后在使用命令来一键部署openstack：
+
 salt '*' state.highstate saltenv=openstack
 
 
