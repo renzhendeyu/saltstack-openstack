@@ -18,6 +18,10 @@ salt '*' state.highstate saltenv=envprepare
 salt '*' state.highstate saltenv=openstack
 
 
+dbpass.sh用来修改所有用户的数据库密码     #详情见https://blog.csdn.net/shiyuqi_blog/article/details/89437203
+userpass.sh用来修改所有用户的openstack密码
+hosts.sh用来修改控制节点和计算节点的主机名称、ip地址以及网卡名称
+
 
 #Warnning
 
