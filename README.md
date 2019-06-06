@@ -2,11 +2,17 @@
 通过saltstack部署安装openstack
 安装完saltstack后。
 修改saltstack--master的配置文件：
+
 file_roots:
+
   openstack:
+  
     - /srv/openstack
+    
   envprepare:
+  
     - /srv/envprepare
+    
 重启saltstack服务。
 
 先使用命令来部署openstack安装环境，部署完后，系统会自动重启以适用配置：
