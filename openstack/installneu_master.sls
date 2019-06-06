@@ -58,7 +58,7 @@ vim_neutron:
       - sed -i '/\[DEFAULT\]$/a\interface_driver = linuxbridge' /etc/neutron/l3_agent.ini
       - sed -i '/\[DEFAULT\]$/a\interface_driver = linuxbridge\ndhcp_driver = neutron.agent.linux.dhcp.Dnsmasq\nenable_isolated_metadata = true' /etc/neutron/dhcp_agent.ini
       - sed -i '/\[DEFAULT\]$/a\nova_metadata_host = slave1\nmetadata_proxy_shared_secret = METADATA_SECRET' /etc/neutron/metadata_agent.ini
-      - sed -i '/\[neutron\]$/a\url = http://slave1:9696\nauth_url = http://slave1:5000\nauth_type = password\nproject_domain_name = default\nuser_domain_name = default\nregion_name = RegionOne\nproject_name = service\nusername = neutron\npassword = NEUTRON_PASS\nservice_metadata_proxy = true\nmetadata_proxy_shared_secret = METADATA_SECRET' /etc/nova/nova.conf
+      - sed -i '/^\[neutron\]/a\url = http://slave1:9696\nauth_url = http://slave1:5000\nauth_type = password\nproject_domain_name = default\nuser_domain_name = default\nregion_name = RegionOne\nproject_name = service\nusername = neutron\npassword = NEUTRON_PASS\nservice_metadata_proxy = true\nmetadata_proxy_shared_secret = METADATA_SECRET' /etc/nova/nova.conf
     - require:
       - pkg: pkg_neutron
 ln_neutron:
