@@ -4,9 +4,13 @@ yum_openstack:
 yum_upgrade:
   cmd.run:
     - name: yum -y upgrade
+    - require:
+      - cmd: yum_openstack
 yum_client:
   cmd.run:
     - name: yum -y install python-openstackclient
+    - require:
+      - cmd: yum_upgrade
 selinux_set:
   cmd.run:
     - name: sed -i 's/enforcing$/disabled/' /etc/sysconfig/selinux
@@ -16,9 +20,7 @@ set_firewalld:
 centos_reboot:
   cmd.run:
     - name: reboot
-    - watch:
-      - cmd: yum_openstack
-      - cmd: yum_upgrade
+    - require:
       - cmd: yum_client
       - cmd: selinux_set
       - cmd: set_firewalld
