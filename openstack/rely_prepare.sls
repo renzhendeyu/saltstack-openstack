@@ -36,7 +36,7 @@ make_openstackconf:
       - pkg: env_pkg
 modify_openstackconf:
   cmd.run:
-    - name: echo -e "[mysqld]\nbind-address = 192.168.1.66\ndefault-storage-engine = innodb\ninnodb_file_per_table = on\nmax_connections = 4096\ncollation-server = utf8_general_ci\ncharacter-set-server = utf8" > /etc/my.cnf.d/openstack.cnf
+    - name: echo -e "[mysqld]\nbind-address = controller_ip\ndefault-storage-engine = innodb\ninnodb_file_per_table = on\nmax_connections = 4096\ncollation-server = utf8_general_ci\ncharacter-set-server = utf8" > /etc/my.cnf.d/openstack.cnf
     - watch:
       - cmd: make_openstackconf
 running_mysql:
