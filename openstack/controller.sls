@@ -591,9 +591,3 @@ running_cindermaster:
     - require:
       - cmd: su_cinder
       - cmd: restart_novamaster2
-
-
-
-
-
-
