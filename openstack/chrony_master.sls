@@ -23,3 +23,4 @@ chronyc_sources:
     - name: chronyc sources
     - require:
       - service: running_chrony
+
